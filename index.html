@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Name Badge</title>
+    <style>
+        /*
+         * --- CSS STYLES ---
+         */
+        :root {
+            /* Customize Colors */
+            --primary-color: #007bff; /* Smartevents Blue */
+            --secondary-color: #f8f9fa; /* Light Gray */
+            --text-color-dark: #212529;
+            --text-color-light: #ffffff;
+            --font-family: 'Arial', sans-serif;
+            
+            /* Badge Dimensions - A6 Size: 105mm x 148mm */
+            --badge-width: 105mm;
+            --badge-height: 148mm;
+            --logo-height: 30px;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: var(--secondary-color);
+            font-family: var(--font-family);
+        }
+
+        .badge-container {
+            width: var(--badge-width);
+            height: var(--badge-height);
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background-color: var(--text-color-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-radius: 8px; /* Slightly rounded corners for a modern look */
+        }
+
+        .badge-header {
+            padding: 15px 20px;
+            background-color: var(--primary-color);
+            text-align: center;
+            border-bottom: 5px solid #0056b3; /* Darker blue line for emphasis */
+        }
+
+        .logo-img {
+            max-height: var(--logo-height);
+            width: auto;
+        }
+
+        .badge-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .name-field {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: var(--text-color-dark);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .function-field {
+            font-size: 1.2em;
+            color: #6c757d; /* Muted gray for secondary info */
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .qr-code-container {
+            margin-top: auto; /* Push to the bottom */
+            padding: 10px;
+            border: 3px solid var(--primary-color);
+            border-radius: 6px;
+            background-color: var(--text-color-light);
+        }
+        
+        .qr-code-img {
+            width: 80px;
+            height: 80px;
+            display: block;
+        }
+
+        /* --- Print Styles (Crucial for A6 printing) --- */
+        @media print {
+            body {
+                background: none;
+                justify-content: start;
+                align-items: start;
+                padding: 0;
+            }
+            .badge-container {
+                width: 105mm; /* A6 Width */
+                height: 148mm; /* A6 Height */
+                margin: 0;
+                box-shadow: none;
+                border: none; /* Remove border for clean print */
+            }
+        }
+    </style>
+    </head>
+<body>
+
+    <div class="badge-container">
+        <div class="badge-header">
+            <img src="https://smartevents.co.za/wp-content/uploads/2021/02/cropped-cropped-Smartevent.png" alt="Smartevents Logo" class="logo-img">
+        </div>
+
+        <div class="badge-content">
+            <div class="name-field" id="badgeName">JOHN DOE</div>
+            
+            <div class="function-field" id="badgeFunction">Event Speaker</div>
+
+            <div class="qr-code-container">
+                <img 
+                    id="badgeQrCode"
+                    class="qr-code-img"
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=Placeholder%20Data%20from%20Glide%20Apps" 
+                    alt="QR Code"
+                />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- JAVASCRIPT FOR DYNAMIC DATA POPULATION ---
+        
+        // This is a placeholder for how you would dynamically pull data, 
+        // which Glide Apps would handle when setting up the print or output link.
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Get data from URL parameters (or an internal Glide Apps injection method)
+            // It's common to pass the data in the URL for print/badge generation systems.
+            const name = urlParams.get('name') || 'NAME NOT SET';
+            const func = urlParams.get('function') || 'ROLE NOT SET';
+            const qrData = urlParams.get('qrdata') || 'DEFAULT_QR_DATA';
+
+            // 1. Populate Name
+            document.getElementById('badgeName').textContent = name.toUpperCase();
+
+            // 2. Populate Function
+            document.getElementById('badgeFunction').textContent = func;
+
+            // 3. Generate and Populate QR Code
+            // We use the QR Server API for simplicity. The 'data' field is the string to encode.
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrData)}`;
+            document.getElementById('badgeQrCode').src = qrCodeUrl;
+        });
+
+    </script>
+</body>
+</html>
