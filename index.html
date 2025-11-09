@@ -5,18 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Name Badge</title>
     <style>
-        /*
-         * --- CSS STYLES ---
-         */
         :root {
-            /* Customize Colors */
-            --primary-color: #007bff; /* Smartevents Blue */
-            --secondary-color: #f8f9fa; /* Light Gray */
+            --primary-color: #007bff;
+            --secondary-color: #f8f9fa;
             --text-color-dark: #212529;
             --text-color-light: #ffffff;
             --font-family: 'Arial', sans-serif;
-            
-            /* Badge Dimensions - A6 Size: 105mm x 148mm */
             --badge-width: 105mm;
             --badge-height: 148mm;
             --logo-height: 30px;
@@ -41,14 +35,14 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            border-radius: 8px; /* Slightly rounded corners for a modern look */
+            border-radius: 8px;
         }
 
         .badge-header {
             padding: 15px 20px;
             background-color: var(--primary-color);
             text-align: center;
-            border-bottom: 5px solid #0056b3; /* Darker blue line for emphasis */
+            border-bottom: 5px solid #0056b3;
         }
 
         .logo-img {
@@ -77,13 +71,13 @@
 
         .function-field {
             font-size: 1.2em;
-            color: #6c757d; /* Muted gray for secondary info */
+            color: #6c757d;
             margin-bottom: 20px;
             font-style: italic;
         }
 
         .qr-code-container {
-            margin-top: auto; /* Push to the bottom */
+            margin-top: auto;
             padding: 10px;
             border: 3px solid var(--primary-color);
             border-radius: 6px;
@@ -96,7 +90,7 @@
             display: block;
         }
 
-        /* --- Print Styles (Crucial for A6 printing) --- */
+        /* --- Print Styles --- */
         @media print {
             body {
                 background: none;
@@ -105,15 +99,15 @@
                 padding: 0;
             }
             .badge-container {
-                width: 105mm; /* A6 Width */
-                height: 148mm; /* A6 Height */
+                width: 105mm;
+                height: 148mm;
                 margin: 0;
                 box-shadow: none;
-                border: none; /* Remove border for clean print */
+                border: none;
             }
         }
     </style>
-    </head>
+</head>
 <body>
 
     <div class="badge-container">
@@ -123,14 +117,12 @@
 
         <div class="badge-content">
             <div class="name-field" id="badgeName">JOHN DOE</div>
-            
             <div class="function-field" id="badgeFunction">Event Speaker</div>
-
             <div class="qr-code-container">
                 <img 
                     id="badgeQrCode"
                     class="qr-code-img"
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=Placeholder%20Data%20from%20Glide%20Apps" 
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=Placeholder%20Data"
                     alt="QR Code"
                 />
             </div>
@@ -138,32 +130,28 @@
     </div>
 
     <script>
-        // --- JAVASCRIPT FOR DYNAMIC DATA POPULATION ---
-        
-        // This is a placeholder for how you would dynamically pull data, 
-        // which Glide Apps would handle when setting up the print or output link.
-
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            
-            // Get data from URL parameters (or an internal Glide Apps injection method)
-            // It's common to pass the data in the URL for print/badge generation systems.
             const name = urlParams.get('name') || 'NAME NOT SET';
             const func = urlParams.get('function') || 'ROLE NOT SET';
             const qrData = urlParams.get('qrdata') || 'DEFAULT_QR_DATA';
 
-            // 1. Populate Name
+            // Populate badge fields
             document.getElementById('badgeName').textContent = name.toUpperCase();
-
-            // 2. Populate Function
             document.getElementById('badgeFunction').textContent = func;
 
-            // 3. Generate and Populate QR Code
-            // We use the QR Server API for simplicity. The 'data' field is the string to encode.
+            // Generate QR Code
             const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrData)}`;
-            document.getElementById('badgeQrCode').src = qrCodeUrl;
-        });
+            const qrImg = document.getElementById('badgeQrCode');
+            qrImg.src = qrCodeUrl;
 
+            // Wait until image is loaded before printing
+            qrImg.onload = function() {
+                setTimeout(() => {
+                    window.print();
+                }, 800); // slight delay to ensure layout is ready
+            };
+        });
     </script>
 </body>
 </html>
